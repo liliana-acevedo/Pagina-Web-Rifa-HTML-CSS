@@ -59,7 +59,7 @@
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-gap: 14px;
-      max-height: 700px;
+      max-height: 900px;
       overflow-y: auto;
       margin-bottom: 10px;
     }
