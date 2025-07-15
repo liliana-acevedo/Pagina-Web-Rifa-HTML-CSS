@@ -1,0 +1,105 @@
+.encabezado {
+  width: 100%;
+  height: 75px;
+  background-color: #001c55; /* Azul oscuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; /* Opcional si quieres que quede fijo arriba */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.encabezado h4 {
+    font-size: 25px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #faf9f9;
+}
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      margin: 10px;
+      margin-top: 70px;
+    }
+
+.contenedor {
+    background-color: white; 
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 420px; 
+    margin: 10px; 
+}
+
+/* Título */
+.contenedor h1 {
+  color: #0984e3;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Texto del cuerpo */
+.contenedor p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #2d3436;
+  text-align: center;
+}
+
+/* Enlaces */
+.contenedor a {
+  color: #2356bd;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.contenedor a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  .contenedor {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .encabezado {
+    font-size: 1.2rem;
+  }
+
+  .contenedor h1 {
+    font-size: 1.5rem;
+  }
+
+  .contenedor p {
+    font-size: 1rem;
+  }
+}
+
+.centrarb {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.volver {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: #052a69;
+  color: white; /* Esta línea cambia el color del texto */
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 9px;
+}
+
+.volver:hover {
+  background-color: #007bff; /* Cambia el color al pasar el mouse */
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏆GANA A LO GRANDE🏆</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/pago.css"/>
+  
+</head>
+
+<body>
+        <header class="encabezado" >
+        <h4>🏆GANA A LO GRANDE🏆</h4>
+      </header>
+
+  <div class="container">
+    <h2>DATOS PERSONALES</h2>
+<form id="formulario" action="procesado.html" method="GET">
+  <div class="form-group">
+    <div><input type="text" name="nombres" placeholder="Nombres y Apellidos" required></div>
+    <div><input type="text" name="cedula" placeholder="Cédula" required></div>
+  </div>
+  <div class="form-group">
+    <div><input type="tel" name="telefono" placeholder="Teléfono" required></div>
+    <div><input type="text" name="referencia" placeholder="Referencia de Pago (últimos 6 dígitos)" required></div>
+  </div>
+
+    <div class="section">
+      <h2 class="bank">MODOS DE PAGO</h2>
+      <small style="display: block; text-align: center; font-size: 20px;">Elige una opción.</small>
+      <div class="payment-options">
+        <div class="card selected" onclick="selectPayment('pagoMovil')">PagoMóvil</div>
+        <div class="card" onclick="selectPayment('binance')">Transferencia</div>
+      </div>
+
+      <div class="account-info active" id="infoPagoMovil">
+        <strong>TELÉFONO:</strong> 0412-4822743<br>
+        <strong>CÉDULA:</strong> 29.981.500<br>
+        <strong>BANCO:</strong> VENEZUELA 0102<br>
+        <strong>TITULAR:</strong> LILIANA PIÑANGO<br> 
+      </div>
+
+      <div class="account-info" id="infoBinance">
+        <strong>NUMERO DE CUENTA:</strong>0102-0398-83-0000359159<br>
+        <strong>CÉDULA::</strong> 29.981.500<br>
+        <strong>TITULAR:</strong> LILIANA PIÑANGO<br>
+        <strong>TIPO DE CUENTA:</strong> CORRIENTE
+      </div>
+
+      <div class="total-box">
+        Total: <span id="totalDisplay">Cargando...</span>
+      </div>
+    </div>
+
+
+
+
+<!-- Reemplaza solo esta parte dentro del <div class="section upload-section"> -->
+<div class="section upload-section">
+  <h2>COMPROBANTE DE PAGO</h2>
+  <div class="upload-box" id="uploadBox">Foto/Captura de Pantalla</div>
+  <input type="file" id="fileInput" accept="image/*" style="display:none;">
+  <p class="confirm-text" id="fileName"></p>
+</div>
+
+<script>
+  const uploadBox = document.getElementById('uploadBox');
+  const fileInput = document.getElementById('fileInput');
+  const fileName = document.getElementById('fileName');
+
+  uploadBox.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (file) {
+      fileName.textContent = `Archivo seleccionado: ${file.name}`;
+    } else {
+      fileName.textContent = '';
+    }
+
+    // Quita el efecto azul después de seleccionar archivo
+    uploadBox.classList.remove('clicked');
+  });
+
+  // También remueve el color azul si el usuario cierra el selector sin elegir nada
+  fileInput.addEventListener('blur', () => {
+    setTimeout(() => {
+      uploadBox.classList.remove('clicked');
+    }, 300);
+  });
+</script>
+
+    <p class="confirm-text" id="montoConfirmText">Cargando total...</p>
+    <p class="confirm-text">Al confirmar autorizo el uso de Mis Datos Personales</p>
+    
+    
+     <div class="button-container">
+    <button type="button" class="btn-cancel" id="btnRegresar">REGRESAR</button>
+    <button type="submit" class="btn-confirm" id="btnConfirmar">CONFIRMAR</button>
+  </div>
+</form>
+
+<script>
+  // Botón REGRESAR (va a Boletos.html)
+  document.getElementById('btnRegresar').addEventListener('click', function () {
+    window.location.href = 'Boletos.html';
+  });
+
+  // Botón CONFIRMAR (valida y va a procesado.html)
+  document.getElementById('formulario').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evita envío por defecto
+
+    // Validación automática de HTML5
+    if (this.checkValidity()) {
+      window.location.href = 'procesado.html';
+    } else {
+      // Si algún campo está vacío, muestra los errores del navegador
+      this.reportValidity();
+    }
+  });
+</script>
+
+  <script>
+    // Mostrar datos seleccionados desde boletos.html
+    const cantidad = localStorage.getItem('cantidadBoletos');
+    const monto = localStorage.getItem('montoTotal');
+    let metodoSeleccionado = 'pagoMovil';
+
+    function actualizarTextoConfirmacion() {
+      const confirmText = document.getElementById('montoConfirmText');
+      if (!monto || !cantidad) {
+        confirmText.textContent = 'No se encontró información de los boletos seleccionados.';
+        return;
+      }
+
+      let metodo = metodoSeleccionado === 'binance' ? 'TRANSFERENCIA' : 'PAGOMÓVIL VENEZUELA';
+      confirmText.textContent = `${metodo}: Bs.S ${Number(monto).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${cantidad} boletos)`;
+    }
+
+    if (cantidad && monto) {
+      document.getElementById('totalDisplay').textContent = `Bs.S ${Number(monto).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${cantidad} boletos)`;
+      actualizarTextoConfirmacion();
+    } else {
+      document.getElementById('totalDisplay').textContent = 'Error al cargar datos';
+      document.getElementById('montoConfirmText').textContent = 'No se encontró información de los boletos seleccionados.';
+    }
+
+    function selectPayment(metodo) {
+      metodoSeleccionado = metodo;
+
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+      document.querySelectorAll('.account-info').forEach(info => info.classList.remove('active'));
+
+      if (metodo === 'pagoMovil') {
+        document.querySelector('.card:nth-child(1)').classList.add('selected');
+        document.getElementById('infoPagoMovil').classList.add('active');
+      } else {
+        document.querySelector('.card:nth-child(2)').classList.add('selected');
+        document.getElementById('infoBinance').classList.add('active');
+      }
+
+      actualizarTextoConfirmacion();
+    }
+  </script>
+</body>
+</html>
+
+

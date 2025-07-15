@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆GANA A LO GRANDE🏆</title>
+    <link rel="stylesheet" href="css/boletos.css"/>
+
+<body>
+      <header class="encabezado" >
+        <h4>🏆GANA A LO GRANDE🏆</h4>
+      </header>
+
+ <div class="container">
+    <div class="header">LISTA DE TICKETS</div>
+    <div class="summary">
+      Seleccionados: <span id="selectedCount">0</span> | Monto total: <span id="totalAmount">0</span> Bs
+    </div>
+    <div class="grid" id="numberGrid"></div>
+    <div class="pagination">
+      <button onclick="prevPage()">⟨</button>
+      <span id="pageInfo"></span>
+      <button onclick="nextPage()">⟩</button>
+    </div>
+    <div class="selected-list">
+      Seleccionados (<span id="count">0</span>):
+      <div class="selected-items" id="selectedNumbers"></div>
+    </div>
+    <div style="text-align: center;">
+      <a class="boton" href="index.html">REGRESAR</a>
+      <button onclick="processPayment()" class="boton1">COMPRAR</button>
+      
+    </div>
+  </div>
+
+  <script>
+    const TOTAL_NUMBERS = 10000;
+    const NUMBERS_PER_PAGE = 1005;
+    const PRICE_PER_NUMBER = 150;
+
+    let currentPage = 0;
+    let selected = new Set();
+
+    function padNumber(num) {
+      return num.toString().padStart(4, '0');
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('numberGrid');
+      grid.innerHTML = '';
+
+      const start = currentPage * NUMBERS_PER_PAGE;
+      const end = Math.min(start + NUMBERS_PER_PAGE, TOTAL_NUMBERS);
+
+      for (let i = start; i < end; i++) {
+        const number = padNumber(i);
+        const div = document.createElement('div');
+        div.className = 'number' + (selected.has(number) ? ' selected' : '');
+        div.textContent = number;
+        div.onclick = () => toggleSelect(number);
+        grid.appendChild(div);
+      }
+
+      document.getElementById('pageInfo').textContent = `Página ${currentPage + 1} de ${Math.ceil(TOTAL_NUMBERS / NUMBERS_PER_PAGE)}`;
+    }
+
+    function toggleSelect(number) {
+      if (selected.has(number)) {
+        selected.delete(number);
+      } else {
+        selected.add(number);
+      }
+      updateSummary();
+      renderGrid();
+    }
+
+    function removeSelected(number) {
+      selected.delete(number);
+      updateSummary();
+      renderGrid();
+    }
+
+    function updateSummary() {
+      const count = selected.size;
+      const amount = count * PRICE_PER_NUMBER;
+
+      document.getElementById('selectedCount').textContent = count;
+      document.getElementById('totalAmount').textContent = Number(amount).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('count').textContent = count;
+
+      const selectedContainer = document.getElementById('selectedNumbers');
+      selectedContainer.innerHTML = '';
+
+      if (count === 0) {
+        selectedContainer.textContent = 'Ninguno';
+      } else {
+        Array.from(selected).forEach(number => {
+          const item = document.createElement('div');
+          item.className = 'selected-item';
+          item.textContent = number;
+
+          const btn = document.createElement('eliminar');
+          btn.className = 'eliminar';
+          btn.innerHTML = 'x';
+          btn.onclick = () => removeSelected(number);
+
+          item.appendChild(btn);
+          selectedContainer.appendChild(item);
+        });
+      }
+    }
+
+    function nextPage() {
+      if ((currentPage + 1) * NUMBERS_PER_PAGE < TOTAL_NUMBERS) {
+        currentPage++;
+        renderGrid();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        renderGrid();
+      }
+    }
+
+function processPayment() {
+  if (selected.size < 2) {
+    alert('LA COMPRA MINIMA ES DE 2 TICKETS');
+  } else {
+    const cantidad = selected.size;
+    const monto = cantidad * PRICE_PER_NUMBER;
+
+    // Guardamos los datos para la página de pago
+    localStorage.setItem('cantidadBoletos', cantidad);
+    localStorage.setItem('montoTotal', monto.toFixed(2));
+
+
+    window.location.href = 'pago.html';
+    
+  }
+}
+    renderGrid();
+    updateSummary();
+  </script>
+</body>
+</html>
