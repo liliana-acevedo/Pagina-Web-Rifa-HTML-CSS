@@ -35,7 +35,7 @@ body {
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 490px; 
+    max-width: 510px; 
     margin: 10px auto; 
 }
 
@@ -47,11 +47,13 @@ body {
 .informacion h1{
     color: #001c55;
     font-size: 20px;
+    text-align: center;
 }
 
 .informacion p {
     margin: 10px 0;
     font-size: 20px;
+    text-align: center;
 }
 
 .parrafo{
